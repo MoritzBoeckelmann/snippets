@@ -1,0 +1,18 @@
+{
+  "snippetRootPath": "/src/snippet",
+  "variableIndicatorStart": "$",
+  "variableIndicatorEnd": "$",
+  "searchMode": "strict",
+  "separationToken": ".",
+  "strictSeparationToken": "-",
+  "defaultLanguage": "en-GB",
+  "languages": [
+    {
+      "identifier": "en-GB",
+      "code": "en_GB",
+      "language": "English",
+      "country": "Great Britain",
+      "fallback": false
+    }
+  ]
+}

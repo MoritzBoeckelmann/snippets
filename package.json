@@ -1,6 +1,6 @@
 {
   "name": "@moritzboeckelmann/snippets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This packages provides functions to use snippets in any javascript or typescript easily",
   "main": "dist/cjs/snippet.js",
   "module": "dist/esm/snippet.js",

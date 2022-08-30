@@ -1,23 +1,45 @@
-import SearchModeE from '../enumerations/SearchModeE';
-import {variablePlaceholder, envName, defaultConfigPath} from '../variables.json';
 import ConfigI from '../interfaces/ConfigI';
-import {config as env} from 'dotenv';
-import ProvidedConfigI from '../interfaces/ProvidedConfigI';
 import LanguageI from '../interfaces/LanguageI';
 import path from 'path';
+import ProvidedConfigI from '../interfaces/ProvidedConfigI';
+import SearchModeE from '../enumerations/SearchModeE';
+import {config as env} from 'dotenv';
+import {defaultConfigPath, envName, variablePlaceholder} from '../variables.json';
 
+/**
+ *
+ */
 class ConfigService {
 
+    /**
+     * Object that implements the ConfigI interface and includes all config values.
+     * @private
+     */
     private readonly config: ConfigI
 
-     constructor(config: ProvidedConfigI = {}) {
+    /**
+     * Constructor of the config service.
+     * @param config Config values that should be set for this config service.
+     */
+    constructor(config: ProvidedConfigI = {}) {
         this.config = this.initialiseConfig(require('../defaultSnippetConfig.json'), this.getEnvConfig(), config);
     }
 
+    /**
+     *
+     * @param configName
+     */
     public getConfig(configName: (keyof ConfigI)): any {
         return this.config[configName];
     }
 
+    /**
+     *
+     * @param defaultConfig
+     * @param envConfig
+     * @param passedConfig
+     * @private
+     */
     private initialiseConfig(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI): ConfigI {
         const snippetRootPath: string = this.extractSnippetRootPath(defaultConfig, envConfig, passedConfig);
         const [variableIndicatorStart, variableIndicatorEnd]: string[] = this.extractVariableIndicators(defaultConfig, envConfig, passedConfig);
@@ -38,6 +60,11 @@ class ConfigService {
         };
     }
 
+
+    /**
+     *
+     * @private
+     */
     private getEnvConfig(): ProvidedConfigI {
         env().parsed;
         const envConfigPath: string | undefined = process.env[envName];
@@ -63,6 +90,13 @@ class ConfigService {
         }
     }
 
+    /**
+     *
+     * @param defaultConfig
+     * @param envConfig
+     * @param passedConfig
+     * @private
+     */
     private extractSnippetRootPath(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI): string {
         let snippetRootPath: string = passedConfig.snippetRootPath ?? envConfig.snippetRootPath ?? defaultConfig.snippetRootPath;
         if(path.isAbsolute(snippetRootPath)) {
@@ -71,6 +105,13 @@ class ConfigService {
         return path.join(process.cwd(), snippetRootPath);
     }
 
+    /**
+     *
+     * @param defaultConfig
+     * @param envConfig
+     * @param passedConfig
+     * @private
+     */
     private extractVariableIndicators(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI): string[] {
         const indicator: string | undefined = passedConfig.variableIndicator ?? envConfig.variableIndicator;
         if(indicator !== undefined) {
@@ -81,6 +122,15 @@ class ConfigService {
         }
         return [defaultConfig.variableIndicatorStart, defaultConfig.variableIndicatorEnd];
     }
+
+    /**
+     *
+     * @param defaultConfig
+     * @param envConfig
+     * @param passedConfig
+     * @param languages
+     * @private
+     */
     private extractDefaultLanguage(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI, languages: LanguageI[]): string | undefined {
         const providedDefaultLanguage: string | undefined = passedConfig.defaultLanguage ?? envConfig.defaultLanguage ?? defaultConfig.defaultLanguage;
         return languages.find(language =>
@@ -88,6 +138,13 @@ class ConfigService {
         )?.identifier;
     }
 
+    /**
+     *
+     * @param defaultConfig
+     * @param envConfig
+     * @param passedConfig
+     * @private
+     */
     private extractLanguages(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI): LanguageI[] {
         let languages = passedConfig.languages ?? envConfig.languages;
         if(languages !== undefined) {

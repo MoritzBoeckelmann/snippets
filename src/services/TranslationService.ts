@@ -81,8 +81,6 @@ class TranslationService {
             steps.forEach(step => {
                 if (this.validateJson(snippetObject, step)) {
                     snippetObject = snippetObject[step];
-                } else {
-                    return undefined;
                 }
             });
             if (this.validateJson(snippetObject, languageIdentifier) && !languageSelected) {
@@ -91,8 +89,7 @@ class TranslationService {
             if (typeof snippetObject === 'string') {
                 return snippetObject;
             }
-        } catch {
-        }
+        } catch {}
         return undefined;
     }
 
@@ -158,11 +155,10 @@ class TranslationService {
                 return DirectoryReaderResponseE.DIRECTORY;
             }
             if (directoryEntries.find(directoryEntry => (directoryEntry.name === (nextStep + snippetFileExtension)) && (!directoryEntry.isDirectory())) !== undefined) {
-                return DirectoryReaderResponseE.FILE
+                return DirectoryReaderResponseE.FILE;
             }
-        } catch {
-        }
-        return DirectoryReaderResponseE.ERROR
+        } catch {}
+        return DirectoryReaderResponseE.ERROR;
     }
 
     private validateJson(obj: any, nextStep: string): boolean {

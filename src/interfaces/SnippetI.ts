@@ -1,8 +1,6 @@
-interface SnippetI {
+export default interface SnippetI {
     snippetTag: string
     translations: {
         [key: string]: string
     }
 }
-
-export default SnippetI;

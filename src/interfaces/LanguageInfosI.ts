@@ -1,8 +1,6 @@
-interface LanguageInfosI {
+export default interface LanguageInfosI {
     code?: string
-    language?: string
     country?: string
     fallback?: string
+    language?: string
 }
-
-export default LanguageInfosI;

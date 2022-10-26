@@ -1,6 +1,6 @@
 {
   "envName": "SNIPPET_CONFIG_PATH",
   "defaultConfigPath": "/snippet/config.json",
-  "variablePlaceholder": "VARIABLE",
-  "snippetFileExtension": ".snippet.json"
+  "snippetFileExtension": ".snippet.json",
+  "variablePlaceholder": "VARIABLE"
 }

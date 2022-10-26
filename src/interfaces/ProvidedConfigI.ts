@@ -1,17 +1,14 @@
 import SearchModeE from '../enumerations/SearchModeE';
-import LanguageI from './LanguageI';
 import LanguageInfosI from './LanguageInfosI';
 
-interface ProvidedConfigI {
-    snippetRootPath?: string
-    variableIndicator?: string
-    searchMode?: SearchModeE
-    separationToken?: string
-    strictSeparationToken?: string
+export default interface ProvidedConfigI {
     defaultLanguage?: string | undefined
     languages?: {
         [identifier: string]: LanguageInfosI
     }
+    searchMode?: SearchModeE
+    separationToken?: string
+    snippetRootPath?: string
+    strictSeparationToken?: string
+    variableIndicator?: string
 }
-
-export default ProvidedConfigI;

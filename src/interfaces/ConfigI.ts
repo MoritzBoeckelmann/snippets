@@ -1,4 +1,6 @@
 import LanguageConfigI from './LanguageConfigI';
 import SnippetConfigI from './SnippetConfigI';
 
-export default interface ConfigI extends SnippetConfigI, LanguageConfigI {}
+interface ConfigI extends SnippetConfigI, LanguageConfigI {}
+
+export default ConfigI;

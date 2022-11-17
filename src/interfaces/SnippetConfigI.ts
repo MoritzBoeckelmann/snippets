@@ -1,6 +1,6 @@
 import SearchModeE from '../enumerations/SearchModeE';
 
-export default interface SnippetConfigI {
+interface SnippetConfigI {
     snippetRootPath: string
     variableIndicatorStart: string
     variableIndicatorEnd: string
@@ -8,3 +8,5 @@ export default interface SnippetConfigI {
     separationToken: string
     strictSeparationToken: string
 }
+
+export default SnippetConfigI;

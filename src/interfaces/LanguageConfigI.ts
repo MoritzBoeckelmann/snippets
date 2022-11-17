@@ -1,6 +1,8 @@
 import LanguageI from './LanguageI';
 
-export default interface LanguageConfigI extends Object {
+interface LanguageConfigI extends Object {
     defaultLanguage: string | undefined
     languages: LanguageI[]
 }
+
+export default LanguageConfigI;

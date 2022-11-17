@@ -1,7 +1,7 @@
-import SearchModeE from '../enumerations/SearchModeE';
 import LanguageInfosI from './LanguageInfosI';
+import SearchModeE from '../enumerations/SearchModeE';
 
-export default interface ProvidedConfigI {
+interface ProvidedConfigI {
     defaultLanguage?: string | undefined
     languages?: {
         [identifier: string]: LanguageInfosI
@@ -12,3 +12,5 @@ export default interface ProvidedConfigI {
     strictSeparationToken?: string
     variableIndicator?: string
 }
+
+export default ProvidedConfigI;

@@ -1,21 +1,20 @@
+import {defaultConfigPath, envName, variablePlaceholder} from '../variables.json';
 import ConfigI from '../interfaces/ConfigI';
 import LanguageI from '../interfaces/LanguageI';
-import path from 'path';
 import ProvidedConfigI from '../interfaces/ProvidedConfigI';
 import SearchModeE from '../enumerations/SearchModeE';
 import {config as env} from 'dotenv';
-import {defaultConfigPath, envName, variablePlaceholder} from '../variables.json';
+import path from 'path';
 
 /**
  *  A Service containing all settings and therefor all needed functions.
  */
 class ConfigService {
-
     /**
      * Object that implements the ConfigI interface and includes all config values.
      * @private
      */
-    private readonly config: ConfigI
+    private readonly config: ConfigI;
 
     /**
      * Constructor of the config service.
@@ -42,33 +41,40 @@ class ConfigService {
      *
      * @param defaultConfig Default configuration object, provided with the plugin.
      * @param envConfig Env configuration object that can be provided by the plugin user and applies to every instance of the ConfigService.
-     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization of an ConfigService instance applying only for that instance.
+     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization
+     * of an ConfigService instance applying only for that instance.
      *
      * @return ConfigI
      * @private
      */
     private mergeConfig(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI): ConfigI {
         // Extracting and merging every config value.
-        const snippetRootPath: string = this.extractSnippetRootPath(defaultConfig, envConfig, passedConfig);
-        const [variableIndicatorStart, variableIndicatorEnd]: string[] = this.extractVariableIndicators(defaultConfig, envConfig, passedConfig);
-        const searchMode: SearchModeE = passedConfig.searchMode ?? envConfig.searchMode ?? defaultConfig.searchMode;
-        const separationToken: string = passedConfig.separationToken ?? envConfig.separationToken ?? defaultConfig.separationToken;
-        const strictSeparationToken: string = passedConfig.strictSeparationToken ?? envConfig.strictSeparationToken ?? defaultConfig.strictSeparationToken;
-        const languages: LanguageI[] = this.extractLanguages(defaultConfig, envConfig, passedConfig);
-        const defaultLanguage: string | undefined = this.extractDefaultLanguage(defaultConfig, envConfig, passedConfig, languages);
+        const snippetRootPath: string
+            = this.extractSnippetRootPath(defaultConfig, envConfig, passedConfig);
+        const [variableIndicatorStart, variableIndicatorEnd]: string[]
+            = this.extractVariableIndicators(defaultConfig, envConfig, passedConfig);
+        const searchMode: SearchModeE
+            = passedConfig.searchMode ?? envConfig.searchMode ?? defaultConfig.searchMode;
+        const separationToken: string
+            = passedConfig.separationToken ?? envConfig.separationToken ?? defaultConfig.separationToken;
+        const strictSeparationToken: string
+            = passedConfig.strictSeparationToken ?? envConfig.strictSeparationToken ?? defaultConfig.strictSeparationToken;
+        const languages: LanguageI[]
+            = this.extractLanguages(defaultConfig, envConfig, passedConfig);
+        const defaultLanguage: string | undefined
+            = this.extractDefaultLanguage(defaultConfig, envConfig, passedConfig, languages);
         // Returning all values as one object.
         return {
-            snippetRootPath,
-            variableIndicatorStart,
-            variableIndicatorEnd,
+            defaultLanguage,
+            languages,
             searchMode,
             separationToken,
+            snippetRootPath,
             strictSeparationToken,
-            defaultLanguage,
-            languages
+            variableIndicatorEnd,
+            variableIndicatorStart
         };
     }
-
 
     /**
      * Searching for a config file provided by the plugin user.
@@ -84,22 +90,27 @@ class ConfigService {
         // Trying to read the config file.
         try {
             // Checking whether the env variable SNIPPET_CONFIG_PATH was set.
-            if(envConfigPath !== undefined) {
-                // In case the envConfigPath is not absolut an absolut path is getting created from the given relative path outgoing from the process directory.
-                if(!path.isAbsolute(envConfigPath)) {
-                    envConfigPath = path.join(process.cwd(), envConfigPath)
+            if (envConfigPath !== undefined) {
+                /* In case the envConfigPath is not absolut an absolut path is getting
+                   created from the given relative path outgoing from the process directory.
+                 */
+                if (!path.isAbsolute(envConfigPath)) {
+                    envConfigPath = path.join(process.cwd(), envConfigPath);
                 }
 
                 // Reading and returning the config file.
                 return require(envConfigPath);
-            } else {
+            }
+            else {
                 // Checking whether the defaultConfigPath is absolut.
-                if(path.isAbsolute(defaultConfigPath)) {
+                if (path.isAbsolute(defaultConfigPath)) {
                     // Reading and returning the config file from the default path.
                     return require(defaultConfigPath);
                 }
                 else {
-                    // Creating an absolut path from the relative defaultConfigPath outgoing from the process directory. Reading and returning the config file from the default path.
+                    /* Creating an absolut path from the relative defaultConfigPath outgoing from the process directory.
+                       Reading and returning the config file from the default path.
+                     */
                     return require(path.join(process.cwd(), defaultConfigPath));
                 }
             }
@@ -115,7 +126,8 @@ class ConfigService {
      *
      * @param defaultConfig Default configuration object, provided with the plugin.
      * @param envConfig Env configuration object that can be provided by the plugin user and applies to every instance of the ConfigService.
-     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization of an ConfigService instance applying only for that instance.
+     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization
+     * of an ConfigService instance applying only for that instance.
      *
      * @returns String
      * @private
@@ -125,7 +137,7 @@ class ConfigService {
         let snippetRootPath: string = passedConfig.snippetRootPath ?? envConfig.snippetRootPath ?? defaultConfig.snippetRootPath;
 
         // Creating an absolut path from the snippetRootPath outgoing from the process directory.
-        if(!path.isAbsolute(snippetRootPath)) {
+        if (!path.isAbsolute(snippetRootPath)) {
             snippetRootPath = path.join(process.cwd(), snippetRootPath);
         }
 
@@ -134,11 +146,13 @@ class ConfigService {
     }
 
     /**
-     * Returns an array with the length of 2. The first entry contains the starting indicator for a variable and the second entry the ending indicator for a variable.
+     * Returns an array with the length of 2. The first entry contains the starting indicator for a variable
+     * and the second entry the ending indicator for a variable.
      *
      * @param defaultConfig Default configuration object, provided with the plugin.
      * @param envConfig Env configuration object that can be provided by the plugin user and applies to every instance of the ConfigService.
-     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization of an ConfigService instance applying only for that instance.
+     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization
+     * of an ConfigService instance applying only for that instance.
      *
      * @returns String[]
      * @private
@@ -148,17 +162,19 @@ class ConfigService {
         const indicator: string | undefined = passedConfig.variableIndicator ?? envConfig.variableIndicator;
 
         // Checks whether the indicator string is set.
-        if(indicator !== undefined) {
+        if (indicator !== undefined) {
             // In case it's set, the indicator is split by the variablePlaceholder, defined in the variables.json.
             const indicators: string[] = indicator.split(variablePlaceholder);
 
             // If indicators has a length of 2 the array will be returned.
-            if(indicators.length === 2) {
+            if (indicators.length === 2) {
                 return indicators;
             }
         }
 
-        // Returning the default start and end indicator in case the provided configurations don't contain a variableIndicator or the provided variableIndicator is not configured correctly.
+        /* Returning the default start and end indicator in case the provided configurations don't contain a variableIndicator
+           or the provided variableIndicator is not configured correctly.
+         */
         return [defaultConfig.variableIndicatorStart, defaultConfig.variableIndicatorEnd];
     }
 
@@ -167,19 +183,25 @@ class ConfigService {
      *
      * @param defaultConfig Default configuration object, provided with the plugin.
      * @param envConfig Env configuration object that can be provided by the plugin user and applies to every instance of the ConfigService.
-     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization of an ConfigService instance applying only for that instance.
+     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization
+     * of an ConfigService instance applying only for that instance.
      * @param languages List of all available languages.
      *
      * @returns string | undefined
      * @private
      */
-    private extractDefaultLanguage(defaultConfig: ConfigI, envConfig: ProvidedConfigI, passedConfig: ProvidedConfigI, languages: LanguageI[]): string | undefined {
+    private extractDefaultLanguage(
+        defaultConfig: ConfigI,
+        envConfig: ProvidedConfigI,
+        passedConfig: ProvidedConfigI, languages: LanguageI[]
+    ): string | undefined {
         // Loads the configured value of the default Language.
-        const providedDefaultLanguage: string | undefined = passedConfig.defaultLanguage ?? envConfig.defaultLanguage ?? defaultConfig.defaultLanguage;
+        const providedDefaultLanguage: string | undefined
+            = passedConfig.defaultLanguage ?? envConfig.defaultLanguage ?? defaultConfig.defaultLanguage;
 
         // Returns the configured value in case it fits with one language indicator of the provided language list. Else undefined will be returned.
-        return languages.find(language =>
-            language.identifier === providedDefaultLanguage
+        return languages.find(
+            language => language.identifier === providedDefaultLanguage
         )?.identifier;
     }
 
@@ -188,7 +210,8 @@ class ConfigService {
      *
      * @param defaultConfig Default configuration object, provided with the plugin.
      * @param envConfig Env configuration object that can be provided by the plugin user and applies to every instance of the ConfigService.
-     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization of an ConfigService instance applying only for that instance.
+     * @param passedConfig Passed configuration object that can be provided by the plugin user with the initialization
+     * of an ConfigService instance applying only for that instance.
      *
      * @returns LanguageI[]
      * @private
@@ -197,7 +220,7 @@ class ConfigService {
         // Creating an array with all provided languages.
         let languages = passedConfig.languages ?? envConfig.languages;
         // Checking whether the list is defined. Else the default languages will be returned.
-        if(languages !== undefined) {
+        if (languages !== undefined) {
             // List of all prepared languages.
             let preparedLanguages: LanguageI[] = [];
 
@@ -214,7 +237,7 @@ class ConfigService {
             // Running threw the prepared languages.
             preparedLanguages.forEach(preparedLanguage => {
                 // Checking whether the provided fallback refers to an existing language
-                if(preparedLanguages.find(checkedLanguage => checkedLanguage.identifier === preparedLanguage.fallback) === undefined) {
+                if (preparedLanguages.find(checkedLanguage => checkedLanguage.identifier === preparedLanguage.fallback) === undefined) {
                     // If the provided fallback doesn't refer to an existing language, the value of fallback will be set undefined.
                     preparedLanguage.fallback = undefined;
                 }

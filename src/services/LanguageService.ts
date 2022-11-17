@@ -1,5 +1,5 @@
-import LanguageI from "../interfaces/LanguageI";
 import ConfigService from './ConfigService';
+import LanguageI from '../interfaces/LanguageI';
 
 /**
  * Service including every methode regarding the available languages.
@@ -56,7 +56,7 @@ class LanguageService {
     }
 
     /**
-     * Returns the identifier of the default language. If there is no defaul language, undefined will be returned.
+     * Returns the identifier of the default language. If there is no default language, undefined will be returned.
      *
      * @returns string|undefined
      */
@@ -79,7 +79,6 @@ class LanguageService {
         // Returning the full information of the alternative language.
         return alternativeIdentifier !== undefined ? this.getLanguage(alternativeIdentifier) : undefined;
     }
-
 }
 
 export default LanguageService;
